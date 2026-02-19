@@ -1,0 +1,40 @@
+
+---
+
+## 📁 Script complet : import_users.ps1
+
+```powershell
+Import-Module ActiveDirectory
+
+$users = Import-Csv "C:\users.csv"
+
+foreach ($user in $users) {
+
+    $fullname = "$($user.prenom) $($user.nom)"
+    $sam = "$($user.prenom).$($user.nom)"
+
+    New-ADUser `
+        -Name $fullname `
+        -GivenName $user.prenom `
+        -Surname $user.nom `
+        -SamAccountName $sam `
+        -UserPrincipalName "$sam@laplateforme.io" `
+        -AccountPassword (ConvertTo-SecureString "Azerty_2025!" -AsPlainText -Force) `
+        -ChangePasswordAtLogon $true `
+        -Enabled $true
+
+    $groups = @(
+        $user.groupe1,
+        $user.groupe2,
+        $user.groupe3,
+        $user.groupe4,
+        $user.groupe5,
+        $user.groupe6
+    )
+
+    foreach ($group in $groups) {
+        if ($group -ne "") {
+            Add-ADGroupMember -Identity $group -Members $sam
+        }
+    }
+}
