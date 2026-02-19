@@ -1,0 +1,18 @@
+# Wordpress Docker Deployment
+
+## Objectif
+
+Déployer Wordpress avec :
+- nginx
+- mariadb
+- php-fpm
+- volume partagé
+
+---
+
+## Architecture
+
+- nginx : reverse proxy
+- wordpress : application
+- mariadb : base de données
+- volume commun pour data persistantes
